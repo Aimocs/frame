@@ -1,33 +1,28 @@
 <?php
 
 namespace followed\framed\Http;
-
-use FastRoute\RouteCollector;
-use function FastRoute\simpleDispatcher;
+// use followed\framed\Http\Response;
+use followed\framed\Routing\Router;
 
 class Kernel
-{
+{   
+    public function __construct(
+        private Router $router
+    ){}
 
     public function handle(Request $request): Response
     {
+        try{
+            [$routeHandler,$var]=$this->router->dispatch($request);
+            $response=call_user_func_array($routeHandler,$var);
+        }catch(HTTPException $exception){
+            $response=new Response($exception->getMessage(),$exception->getStatus());
 
-        // Create a dispatcher
-        $dispatcher = simpleDispatcher(function (RouteCollector $routeCollector) {
+        } catch (\Exception $excepition){
+            $response=new Response($excepition->getMessage(),500);
+        }
 
-            $routes = include BASE_PATH . '/routes/web.php';
-            foreach ($routes as $route) {
-                $routeCollector->addRoute(...$route);
-            }
-
-        });
-
-        // Dispatch a URI, to obtain the route info
-        $routeInfo = $dispatcher->dispatch($request->getMethod(), $request->getPath());
-        
-        [$status,[$controller ,$method], $var] = $routeInfo;
-
-        $response = call_user_func_array([new $controller,$method],$var);
-        // Call the handler, provided by the route info, in order to create a Response
         return $response;
+        
     }
 }
