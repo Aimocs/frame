@@ -1,0 +1,31 @@
+{
+    "name": "dwbuddy/frame",
+    "authors": [
+        {
+            "name": "Aimocs",
+            "email": "csbot69@gmail.com"
+        }
+    ],
+  
+    "autoload":{
+        "psr-4":{
+            "followed\\framed\\":"src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "followed\\framed\\tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^7.0",
+        "phpunit/phpunit": "^11.2"
+    },
+    "require": {
+        "nikic/fast-route": "dev-master",
+        "psr/container": "^2.0",
+        "league/container": "^4.2",
+        "symfony/dotenv": "^6.0",
+        "twig/twig": "^3.11"
+    }
+}
