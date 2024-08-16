@@ -12,13 +12,13 @@ $appEnv = $_SERVER['APP_ENV'] ?? 'prod';
 $templatesPath = BASE_PATH . '/templates';
 $container->add('APP_ENV', new \League\Container\Argument\Literal\StringArgument($appEnv));
 
-$databaseurl= 'sqlite:///' . BASE_PATH . '/var/db.sqlite';
+$databaseurl= 'pdo-sqlite:///' . BASE_PATH . '/var/db.sqlite';
 
 $container->add(
     'base-commands-namespace',
     new \League\Container\Argument\Literal\StringArgument('followed\\framed\\Console\\Command\\'));
 $container->add(followed\framed\Dbal\ConnectionFactory::class)
-    ->addArgument(new \League\Container\Argument\Literal\StringArgument($databaseurl));
+    ->addArguments([new \League\Container\Argument\Literal\StringArgument($databaseurl),\Doctrine\DBAL\Tools\DsnParser::class]);
 
 $container->addShared(\Doctrine\DBAL\Connection::class, function () use ($container): \Doctrine\DBAL\Connection {
     return $container->get(followed\framed\Dbal\ConnectionFactory::class)->create();
@@ -46,5 +46,7 @@ $container->add(followed\framed\Console\Application::class)
 $container->add(followed\framed\Console\Kernel::class)
     ->addArguments([$container,followed\framed\Console\Application::class]);
 
-
+$container->add('database:migrations:migrate',followed\framed\Console\Command\MigrateDatabase::class)
+    ->addArguments([\Doctrine\DBAL\Connection::class,new \League\Container\Argument\Literal\StringArgument(BASE_PATH . '/migrations')]);
+    
 return $container;

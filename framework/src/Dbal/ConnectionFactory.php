@@ -3,15 +3,17 @@
 namespace followed\framed\Dbal;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Tools\DsnParser;
 
 class ConnectionFactory
 {
-    public function __construct(private string $databaseUrl)
+    public function __construct(private string $databaseUrl, private DsnParser $dsnParser)
     {
     }
 
     public function create(): Connection
     {
-        return DriverManager::getConnection(['url' => $this->databaseUrl]);
+        $connectionParams = $this->dsnParser->parse($this->databaseUrl);
+        return DriverManager::getConnection($connectionParams);
     }
 }

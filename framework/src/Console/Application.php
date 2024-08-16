@@ -17,7 +17,6 @@ class Application
         }
         $command = $this->container->get($commandName);
         $args= array_slice($argv, 2);
-
         $options = $this->parseOptions($args);
         $status = $command->execute($options);
         return $status;
@@ -34,7 +33,6 @@ class Application
 
             }
         }
-
         return $options;
     }
 }

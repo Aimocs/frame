@@ -30,12 +30,12 @@ class Kernel
             }
 
             $command = $namespace.pathinfo($commandFile, PATHINFO_FILENAME);
-
             if (is_subclass_of($command, CommandInterface::class)) {
                 $commandName = (new \ReflectionClass($command))->getProperty('name')->getDefaultValue();
-
+              
                 $this->container->add($commandName, $command);
             }
         }
+        
     }
 } 

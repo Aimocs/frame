@@ -22,11 +22,9 @@ class Kernel
             $response=call_user_func_array($routeHandler,$var);
         }catch(HTTPException $exception){
             $response=new Response($exception->getMessage(),$exception->getStatus());
-
         } catch (\Exception $excepition){
             $response=$this->createExceptionResponse($excepition);
         }
-
         return $response;
         
     }
