@@ -9,6 +9,7 @@ use followed\framed\Http\HttpException;
 use followed\framed\Http\HttpExceptionMethodException;
 use followed\framed\Http\Request;
 use Psr\Container\ContainerInterface;
+use followed\framed\Controller\AbstractController;
 class Router implements RouterInterface{
     private array $routes = [];
     public function dispatch(Request $request, ContainerInterface $container): array{
@@ -18,9 +19,14 @@ class Router implements RouterInterface{
         if(is_array($handler)){
             [$controllerId, $method] = $handler;
             $controller= $container->get($controllerId);
+            if (is_subclass_of($controller, AbstractController::class)) {
+                $controller->setRequest($request);
+            }
             $handler = [ $controller, $method];
         }
-        
+
+
+
         return [$handler, $var];
     }
     public function setRoutes(array $routes):void {
