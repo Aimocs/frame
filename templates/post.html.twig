@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 {% block main %}
-<h1>COOL POST {{ id }}</h1>
-<p>COOL</p>
+<h1>COOL POST {{ post.title}}</h1>
+<p>{{post.body}} </p>
+{{post.createdAT.format("Y m d")}}
 {% endblock %}
 

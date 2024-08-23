@@ -3,6 +3,15 @@
 <html lang="en">
 <body>
 <h1>BASE HTML REUSEABLE</h1>
+ {% if session().hasFlash('success') %}
+        <div >
+            <ul style="list-style: none">
+                {% for message in session().getFlash('success') %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
 {% block main %}{% endblock%}
 <p>COOL REUSEABLE</p>
 </body>

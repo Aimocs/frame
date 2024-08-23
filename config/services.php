@@ -27,15 +27,26 @@ $container->addShared(\Doctrine\DBAL\Connection::class, function () use ($contai
 $container->add(followed\framed\Routing\RouterInterface::class,followed\framed\Routing\Router::class);
 $container->extend(followed\framed\Routing\RouterInterface::class)
     ->addMethodCall('setRoutes',[new \League\Container\Argument\Literal\ArrayArgument($router)]);
-$container->add(followed\framed\Http\Kernel::class)
-    ->addArgument(followed\framed\Routing\RouterInterface::class)
+$container->add(followed\framed\Http\Middleware\RequestHandlerInterface::class,followed\framed\Http\Middleware\RequestHandler::class)
     ->addArgument($container);
-$container->addShared("filesystem-loader", \Twig\Loader\FilesystemLoader::class)
-    ->addArgument(new \League\Container\Argument\Literal\StringArgument($templatesPath));
 
-$container->addShared("twig",\Twig\Environment::class)
-    ->addArgument("filesystem-loader");
+$container->add(followed\framed\Http\Kernel::class)
+    ->addArguments([followed\framed\Routing\RouterInterface::class,$container,followed\framed\Http\Middleware\RequestHandlerInterface::class]);
 
+$container->addShared(
+        followed\framed\Session\SessionInterface::class,
+        followed\framed\Session\Session::class
+    );
+    
+    $container->add('template-renderer-factory', followed\framed\Template\TwigFactory::class)
+        ->addArguments([
+            followed\framed\Session\SessionInterface::class,
+            new \League\Container\Argument\Literal\StringArgument($templatesPath)
+        ]);
+    
+    $container->addShared('twig', function () use ($container) {
+        return $container->get('template-renderer-factory')->create();
+    });
 $container->add(followed\framed\Controller\AbstractController::class);
 
 $container->inflector(followed\framed\Controller\AbstractController::class)       ->invokeMethod("setContainer",[$container]);
@@ -48,5 +59,6 @@ $container->add(followed\framed\Console\Kernel::class)
 
 $container->add('database:migrations:migrate',followed\framed\Console\Command\MigrateDatabase::class)
     ->addArguments([\Doctrine\DBAL\Connection::class,new \League\Container\Argument\Literal\StringArgument(BASE_PATH . '/migrations')]);
-    
+$container->add( followed\framed\Http\Middleware\RouterDispatch::class)
+    ->addArguments([followed\framed\Routing\RouterInterface::class,$container]);
 return $container;
