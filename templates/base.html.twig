@@ -12,6 +12,16 @@
             </ul>
         </div>
     {% endif %}
+
+{% if session().hasFlash('error') %}
+    <div >
+        <ul style="list-style: none">
+            {% for message in session().getFlash('error') %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
 {% block main %}{% endblock%}
 <p>COOL REUSEABLE</p>
 </body>

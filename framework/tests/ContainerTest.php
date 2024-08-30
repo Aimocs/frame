@@ -1,5 +1,4 @@
 <?php
-
 namespace followed\framed\tests;
 use PHPUnit\Framework\TestCase;
 use followed\framed\Container\Container;
@@ -12,8 +11,6 @@ class ContainerTest extends TestCase
     {   
       //setup
       $container = new Container();
-      
-
       //do stuff
       // id string, concrete class name string | object 
       $container->add('dependant-class',Dependant::class);

@@ -61,4 +61,9 @@ $container->add('database:migrations:migrate',followed\framed\Console\Command\Mi
     ->addArguments([\Doctrine\DBAL\Connection::class,new \League\Container\Argument\Literal\StringArgument(BASE_PATH . '/migrations')]);
 $container->add( followed\framed\Http\Middleware\RouterDispatch::class)
     ->addArguments([followed\framed\Routing\RouterInterface::class,$container]);
+$container->add(followed\framed\Authentication\SessionAuthentication::class)
+    ->addArguments([
+        \App\Repo\UserRepo::class,
+        \followed\framed\Session\SessionInterface::class
+    ]);
 return $container;
