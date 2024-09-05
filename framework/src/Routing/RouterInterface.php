@@ -7,5 +7,4 @@ interface RouterInterface
 {
     public function dispatch(Request $request, ContainerInterface $container): array;
 
-    public function setRoutes(array $routes):void;
 }

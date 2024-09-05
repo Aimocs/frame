@@ -2,12 +2,12 @@
 
 namespace followed\framed\Authentication;
 
+use followed\framed\Session\Session;
 use followed\framed\Session\SessionInterface;
 
 class SessionAuthentication implements  SessionAuthInterface
 {
     private AuthUserInterface $user;
-
     public function __construct(private AuthRepositoryInterface $authRepository, private SessionInterface $session)
     {
 
@@ -20,12 +20,12 @@ class SessionAuthentication implements  SessionAuthInterface
             return false;
         }
 
-        if (password_verify($password, $user->getPassword())) {
-            $this->login($user);
-            return true;
+        if (!password_verify($password, $user->getPassword())) {
+            return false;
         }
 
-        return false;
+        $this->login($user);
+        return true;
     }
 
     public function login(AuthUserInterface $user)
@@ -33,14 +33,14 @@ class SessionAuthentication implements  SessionAuthInterface
         // Start a session
         $this->session->start();
         // Log the user in
-        $this->session->set("auth_id",$user->getAuthId());
+        $this->session->set(Session::AUTH_KEY,$user->getAuthId());
         // Set the user
         $this->user = $user;
     }
 
     public function logout()
     {
-        // TODO: Implement logout() method.
+        $this->session->remove(Session::AUTH_KEY);
     }
 
     public function getUser(): AuthUserInterface

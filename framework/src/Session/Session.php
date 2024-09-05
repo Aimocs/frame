@@ -5,7 +5,7 @@ namespace followed\framed\Session;
 class Session implements SessionInterface
 {
     private const FLASH_KEY = 'flash';
-
+    public  const AUTH_KEY= "auth_id";
     public function start(): void 
     {
         if(session_status() === PHP_SESSION_NONE){
@@ -62,4 +62,10 @@ class Session implements SessionInterface
     {
         unset($_SESSION[self::FLASH_KEY]);
     }
+
+    public function isAuthenticated(): bool
+    {
+        return $this->has(self::AUTH_KEY);
+    }
+
 }

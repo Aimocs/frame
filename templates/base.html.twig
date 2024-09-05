@@ -22,6 +22,16 @@
         </ul>
     </div>
 {% endif %}
+{% if session().hasFlash('email') %}
+<div >
+    <ul style="list-style: none">
+        {% for message in session().getFlash('email') %}
+            <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+<h3><strong> {% if session().isAuthenticated() %}  <a href="/logout">Logout</a> {% else %}  <a href="/login">Login</a> {% endif %}</strong></h3>
 {% block main %}{% endblock%}
 <p>COOL REUSEABLE</p>
 </body>

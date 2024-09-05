@@ -25,13 +25,13 @@ $container->addShared(\Doctrine\DBAL\Connection::class, function () use ($contai
 });
 
 $container->add(followed\framed\Routing\RouterInterface::class,followed\framed\Routing\Router::class);
-$container->extend(followed\framed\Routing\RouterInterface::class)
-    ->addMethodCall('setRoutes',[new \League\Container\Argument\Literal\ArrayArgument($router)]);
+
 $container->add(followed\framed\Http\Middleware\RequestHandlerInterface::class,followed\framed\Http\Middleware\RequestHandler::class)
     ->addArgument($container);
 
+$container->addShared(\followed\framed\EventDispatcher\EventDispatcher::class);
 $container->add(followed\framed\Http\Kernel::class)
-    ->addArguments([followed\framed\Routing\RouterInterface::class,$container,followed\framed\Http\Middleware\RequestHandlerInterface::class]);
+    ->addArguments([$container,followed\framed\Http\Middleware\RequestHandlerInterface::class,\followed\framed\EventDispatcher\EventDispatcher::class]);
 
 $container->addShared(
         followed\framed\Session\SessionInterface::class,
@@ -66,4 +66,6 @@ $container->add(followed\framed\Authentication\SessionAuthentication::class)
         \App\Repo\UserRepo::class,
         \followed\framed\Session\SessionInterface::class
     ]);
+$container->add(\followed\framed\Http\Middleware\ExtractRouteInfo::class)
+    ->addArgument( new \League\Container\Argument\Literal\ArrayArgument($router));
 return $container;

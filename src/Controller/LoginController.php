@@ -34,4 +34,12 @@ class LoginController extends  AbstractController
         $this ->request->getSession()->setFlash("success","Logined In");
         return new RedirectResponse('/dash');
     }
+    public function logout():Response
+    {
+        $this->authComponent->logout();
+        $this->request->getSession()->setFlash("success", "Logged OUT!!");
+        return new RedirectResponse("/login");
+    }
+
+
 }

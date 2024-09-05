@@ -3,8 +3,9 @@
 namespace App\Entity;
 
 use followed\framed\Authentication\AuthUserInterface;
+use followed\framed\Dbal\Entity;
 
-class User implements AuthUserInterface
+class User extends Entity implements AuthUserInterface
 {
     public function __construct(
         private ?int $id,

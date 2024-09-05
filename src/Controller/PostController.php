@@ -41,7 +41,7 @@ class PostController extends AbstractController
 
         $post = Post::create($title, $body);
 
-        $this->postMapper->save($post);
+        $this->postMapper->save($post,$this->request);
 
         $this->request->getSession()->setFlash('success', sprintf('Post "%s" successfully created', $title));
 

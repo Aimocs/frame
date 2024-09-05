@@ -4,16 +4,18 @@ namespace App\Repo;
 
 use App\Entity\Post;
 use Doctrine\DBAL\Connection;
+use followed\framed\Dbal\DataMapper;
+use http\Env\Request;
 
 class PostMapper
 {
-    public function __construct(private Connection $connection)
+    public function __construct(private DataMapper $dataMapper)
     {
     }
 
-    public function save(Post $post): void
+    public function save(Post $post , \followed\framed\Http\Request  $request): void
     {
-        $stmt = $this->connection->prepare("
+        $stmt = $this->dataMapper->getConnection()->prepare("
             INSERT INTO posts (title, body, created_at)
             VALUES (:title, :body, :created_at) 
         ");
@@ -23,10 +25,9 @@ class PostMapper
         $stmt->bindValue(':created_at', $post->getCreatedAt()->format('Y-m-d H:i:s'));
 
         $stmt->executeStatement();
-
-        $id = $this->connection->lastInsertId();
-
+        $id = $this->dataMapper->save($post,$request);
         $post->setId($id);
+
     }
 }
 

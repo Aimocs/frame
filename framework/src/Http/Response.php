@@ -12,15 +12,17 @@ class Response
     {
         http_response_code($this->status);
     }
-    
-    public function send():void{
-        
+
+    public function send(): void
+    {
         echo $this->content;
     }
 
-    public function setContent(?string $content):void{
+    public function setContent(?string $content): void
+    {
         $this->content = $content;
     }
+
     public function getStatus(): int
     {
         return $this->status;
@@ -30,4 +32,26 @@ class Response
     {
         return $this->headers[$header];
     }
+
+    public function getHeaders(): array
+    {
+        return $this->headers;
+    }
+
+    public function setHeader($key, $value): void
+    {
+        $this->headers[$key] = $value;
+    }
+
+    public function getContent(): ?string
+    {
+        return $this->content;
+    }
+
+    public function setStatus(int $status): void
+    {
+        $this->status = $status;
+    }
+
+
 }
