@@ -8,7 +8,7 @@ return[
     ['GET','/register',[\App\Controller\RegistrationController::class,'index',[\followed\framed\Http\Middleware\Guest::class]]],
     ['POST','/register',[\App\Controller\RegistrationController::class,'register']],
     ['GET','/login',[\App\Controller\LoginController::class,'index',[\followed\framed\Http\Middleware\Guest::class]]],
-    ['POST','/login',[\App\Controller\LoginController::class,'login']],
+    ['POST','/login',[\App\Controller\LoginController::class,'login',[\followed\framed\Http\Middleware\VerifyCsrfToken::class]]],
     ['GET','/logout',[\App\Controller\LoginController::class,'logout']],
     ['GET','/dash',[\App\Controller\DashboardController::class,'index',
         [

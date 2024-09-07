@@ -37,7 +37,7 @@ class RequestHandler implements RequestHandlerInterface
 
     public function injectMiddleware(array $middleware):void
     {
-        array_splice($this->middleware,0,0,$middleware);
+        array_splice($this->middleware,1,0,$middleware);
     }
 }
 

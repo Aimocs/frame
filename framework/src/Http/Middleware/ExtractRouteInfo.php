@@ -49,7 +49,7 @@ class ExtractRouteInfo implements MiddlewareInterface
                 $e->setStatus(404);
                 throw $e;
         }
-       return $requestHandler->handle($request);
+        return $requestHandler->handle($request);
     }
 
 }
